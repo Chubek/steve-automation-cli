@@ -43,4 +43,4 @@ class Record:
         zip_hash = self.__hash_zip()
         del_day = self.__label_dday()
 
-        return (lat, lng, zip_hash, del_day)
+        return (lat, lng, zip_hash)
