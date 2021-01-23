@@ -38,7 +38,7 @@ class DataParser:
 
         for r in res:
             print(f"Writing {r['route']}_{r['day']}.xlsx")
-            self.__write_excel(r["df"], f"{r['route']}_{r['day']}_{hash(str(datetime.now()))}")
+            self.__write_excel(r["df"], f"{r['route']}_{r['day'].replace(' ', '_')}_{hash(str(datetime.now()))}")
 
 
     def __route_day_stopcluster(self, res):
@@ -47,7 +47,7 @@ class DataParser:
         for r in res:          
             for label, group in r["df"].groupby("Label"):
                 print(f"Writing label {r['route']}_{r['day']}_{label}.xlsx")
-                self.__write_excel(group, f"{r['route']}_{r['day']}_{label}_{hash(str(datetime.now()))}")
+                self.__write_excel(group, f"{r['route']}_{r['day'].replace(' ', '_')}_{label}_{hash(str(datetime.now()))}")
 
     def __label_one_file(self, res):
         print("Writing into one file...")
@@ -69,7 +69,11 @@ class DataParser:
         return labels
 
     def __write_excel(self, df, name):
-        df.to_excel(os.path.join(self.folder, f"{name}.xlsx"))
+        try:
+            df.to_excel(os.path.join(self.folder, f"{name}.xlsx"))
+            print(f"{name}.xlsx saved...")
+        except:
+            print(f"Error saving file {name}.xlsx... Perhaps a file with the same name exists?")
 
     def __separate_and_cluster(self):
         print("Starting Separate Data Based on Day and Route...")
@@ -90,14 +94,14 @@ class DataParser:
 
         dfs_main = []
 
-        for i, dic in enumerate(df_list):
+        for i, dic in enumerate(df_list[:1]):
             print(f"Dataframe {i + 1}")
         
             recs = dic["df"].loc[:, ["Address", "City", "Province", "Postal Code", "Delivery Day"]]
 
             labels = self.__cluster_records([item for _, item in recs.iterrows()])
  
-            dic["df"].loc[:, "Label"] = [f"L{l}_{dic['route']}_{dic['day']}" for l in labels]
+            dic["df"].loc[:, "Label"] = [f"L{l}_{dic['route']}_{dic['day'].replace(' ', '_')}" for l in labels]
 
             dfs_main.append({"route": dic['route'], "day": dic['day'], "df": dic["df"].iloc[:, :]})        
 
