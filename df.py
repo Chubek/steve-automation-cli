@@ -94,7 +94,7 @@ class DataParser:
 
         dfs_main = []
 
-        for i, dic in enumerate(df_list[:1]):
+        for i, dic in enumerate(df_list):
             print(f"Dataframe {i + 1}")
         
             recs = dic["df"].loc[:, ["Address", "City", "Province", "Postal Code", "Delivery Day"]]
