@@ -97,7 +97,7 @@ class DataParser:
 
             labels = self.__cluster_records([item for _, item in recs.iterrows()])
  
-            dic["df"].loc[:, "Label"] = [f"L{l}" for l in labels]
+            dic["df"].loc[:, "Label"] = [f"L{l}_FOR_{dic['route']}" for l in labels]
 
             dfs_main.append({"route": dic['route'], "day": dic['day'], "df": dic["df"].iloc[:, :]})        
 
